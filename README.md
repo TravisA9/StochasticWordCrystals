@@ -1,5 +1,5 @@
 # WordSpace
-A break text into vector particles and manipulate them through forces in space
+Break text into vector particles and manipulate them through forces in space
 
 Basic idea:
 
