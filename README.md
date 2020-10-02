@@ -15,16 +15,16 @@ depending on the relationship between the three details (from, to, index-adjacen
 Some very cool effects can be seen under very specific circumstances such as continuous rotation 
 and fractal patterns when colapsing. Also, you can get commets, clups and fractal fibres.
 
-General Goals:
+## General Goals:
 
-## Visual:
+### Visual:
 
 * Clups: many, higherarchial clups are a good sign that your data is being classified (grouping).
 
 * Branching Fibres: A decent degree of branching made of fibres of particles and clups is a good sign 
 that there is not only grouping, but that conditional correlation has been found between those groups.
 
-## Functional: 
+### Functional: 
 
 * Word recognition: it is hoped that through the first two spatially oriented goals it will be possible to 
 clearly identify words.
@@ -34,7 +34,7 @@ and replace them with a new particle which represents the word. The same would b
 Until the text is fully abstracted into ideas.
 
 
-## User Interface:
+### User Interface:
 
 * Time travel: Create a slidder or other control to move through time within the provided text and show only 
 the activations within that sliding window. ...Maybe show the correlated abstractions as well.
