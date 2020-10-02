@@ -1,7 +1,7 @@
 # [WordSpace](https://travisa9.github.io/WordSpace/)
-Break text into vector particles and manipulate them through forces in space
+Break text into indexed vector particles and manipulate them through forces in space.
 
-Basic idea:
+## Basic idea:
 
 Words are broken into letter-to-letter vectors along with their index within the article. 
 So you have an array of three details ( 1: from-letter, 2:to-letter, 3:index ). 
