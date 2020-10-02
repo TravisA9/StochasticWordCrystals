@@ -13,15 +13,15 @@ Now the proccess can begin: each particle is moved toward or away from every oth
 depending on the relationship between the three details (from, to, index-adjacency).
 
 Some very cool effects can be seen under very specific circumstances such as continuous rotation 
-and fractal patterns when colapsing. Also, you can get commets, clups and fractal fibres.
+and fractal patterns when colapsing. Also, you can get commets, clumps and fractal fibres.
 
 ## General Goals:
 
 ### Visual:
 
-* **Clups:** many, higherarchial clups are a good sign that your data is being classified (grouping).
+* **Clumps:** many, higherarchial clumps are a good sign that your data is being classified (grouping).
 
-* **Branching Fibres:** A decent degree of branching made of fibres of particles and clups is a good sign 
+* **Branching Fibres:** A decent degree of branching made of fibres of particles and clumps is a good sign 
 that there is not only grouping, but that conditional correlation has been found between those groups.
 
 ### Functional: 
