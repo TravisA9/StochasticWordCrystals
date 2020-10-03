@@ -13,43 +13,53 @@
 		border-radius: 5px 5px 0px 0px;
 	}
 	button:hover{background: pink;}
+	.box{
+		font-size:18px; 
+		border: medium solid steelblue; 
+		border-radius: 9px; 
+		padding: 8px; 
+		color:white;
+	}
 </style>
 
 
 
 <!-- <button onclick="start()"></button> -->
-<button onclick="Matrix()">Matrix</button>
+<!-- <button onclick="Matrix()">Matrix</button> -->
 <button id="pause" onclick="start()">Graph</button>
 <br>
-<canvas id="myCanvas" width="650" height="650" style="background: white; display:inline-block;"></canvas>
-<div class="slidecontainer" style="display:inline-block; vertical-align:top; width:44%; color:white;">
-	Repulsion:<br>
-  <input type="range" min=".001" value=".01" max=".5" step=".001" id="repulse" style="width:400px"><br>
-    Temporal Attraction:<br>
-  <input type="range" min=".001" value=".01" max=".5" step=".001" id="time" style="width:400px"><br>
-    Identity Attraction:<br>
-  <input type="range" min=".0001" value=".001" max=".01" step=".001" id="identity" style="width:400px"><br>
+<canvas id="canvas" width="650" height="650" style="background: white; display:inline-block;"></canvas>
+<div class="box" class="slidecontainer" style="display:inline-block; vertical-align:top; width:40%; color:white;">
+	Repulsion: <span id='repulseVal'>.01</span><br>
+  <input onchange="$('repulseVal').innerHTML = event.target.value;" type="range" min=".0" value=".0005" max=".1" step=".0005" id="repulse" style="width:400px"><br>
+    Temporal Attraction: <span id='timeVal'>.01</span><br>
+  <input onchange="$('timeVal').innerHTML = event.target.value;" type="range" min=".0" value=".022" max=".5" step=".001" id="time" style="width:400px"><br>
+    Identity Attraction: <span id='identityVal'>.001</span><br>
+  <input onchange="$('identityVal').innerHTML = event.target.value;" type="range" min="0" value=".005" max=".1" step=".001" id="identity" style="width:400px"><br>
 
+
+<div class="box">
+	<div id='downlog'>Selection:</div>
+	<div id='movelog'>Pos:</div>
+</div>
+<div class="box" id='dump'>Dump:</div>
 </div>
 
 <h2>Paste the text you would like to anylise here:</h2>
-<div id="content" contenteditable="true" style="font-size:18px; border: medium solid steelblue; border-radius: 9px; padding: 8px; color:white;">An AI Register for each city was introduced in beta today as part of the Next Generation Internet Policy Summit, organized in part by the European Commission and the city of Amsterdam. The Amsterdam registry currently features a handful of algorithms, but it will be extended to include all algorithms following the collection of feedback at the virtual conference to lay out a European vision of the future of the internet, according to a city official. Each algorithm cited in the registry lists datasets used to train a model, a description of how an algorithm is used, how humans utilize the prediction, and how algorithms were assessed for potential bias or risks. The registry also provides citizens a way to give feedback on algorithms their local government uses and the name, city department, and contact information for the person responsible for the responsible deployment of a particular algorithm. A complete algorithmic registry can empower citizens and give them a way to evaluate, examine, or question governments' applications of AI.</div>
+<div id="content" class="box" contenteditable="true" style="">An AI Register for each city was introduced in beta today as part of the Next Generation Internet Policy Summit, organized in part by the European Commission and the city of Amsterdam. The Amsterdam registry currently features a handful of algorithms, but it will be extended to include all algorithms following the collection of feedback at the virtual conference to lay out a European vision of the future of the internet, according to a city official. Each algorithm cited in the registry lists datasets used to train a model, a description of how an algorithm is used, how humans utilize the prediction, and how algorithms were assessed for potential bias or risks. The registry also provides citizens a way to give feedback on algorithms their local government uses and the name, city department, and contact information for the person responsible for the responsible deployment of a particular algorithm. A complete algorithmic registry can empower citizens and give them a way to evaluate, examine, or question governments' applications of AI.</div>
 <script>
 //////////////////////////////////// UTILITY ////////////////////////////////////
 $ = (sel) => document.getElementById(sel);
 randRange = (a,b) => a + ( Math.random() * (b-a) )
-chooseOne = (x) => Math.floor( Math.random() * x.length )
+c = $("canvas");
+ctx = c.getContext("2d");
+nodes = [], text = '';
 //////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-	c = $("myCanvas");
-	ctx = c.getContext("2d");
 //////////////////////////////////////////////////////////////////////////////////
 // In a way this is also a matrix but the matrix does not have a set meaning. Instead
 // the matrix is like an abstract space where the meaning can be changed and derived.
 //////////////////////////////////////////////////////////////////////////////////
-nodes = []
-text = ''
-
+//////////////////////////////////////////////////////////////////////////////////
 function start(){
 	nodes = []
 	text = $("content").innerHTML;
@@ -62,11 +72,17 @@ function start(){
 }
 start()
 //////////////////////////////////////////////////////////////////////////////////
+setInterval(force, 400);
+function force(){
+	fibre(); Graph()
+}
+/////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 function Graph(){
-	// console.log(1)
 	ctx.beginPath();
-	ctx.fillStyle = `#fffc`;
+	ctx.fillStyle = `#fff8`;
 	ctx.fillRect(0, 0, 650, 650);
 
 	for (var i = 1; i < nodes.length; i++){	
@@ -77,87 +93,39 @@ function Graph(){
 	ctx.stroke(); 
 }
 //////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-setInterval(force, 500);
-function force(){
-	fibre(); 
-	Graph()
-}
-/////////////////////////////////////////////////////////////////////////////////
-dist = (x1, y1, x2, y2) => Math.sqrt((x1-=x2)*x1 +(y1-=y2)*y1)
-size = (a,b) => b-a
-/////////////////////////////////////////////////////////////////////////////////
 function fibre( ){
 
 	for(var i = 0; i < nodes.length-2; i++){
 		a = nodes[i]
 		for(var j = i+1; j < nodes.length-1; j++){
 			b = nodes[j]
-			var score = $("repulse").value //.01			
-			// if(a.t==b.t) score+=1;
-			// if(a.f==b.f) score+=1;
+			var score = $("repulse").value //.01
 			if(a.f==b.f && a.t==b.t) score-= $("identity").value
-			  
-
-			// if(Math.abs(a.time-b.time)>5) score-=.005;
-			// if(Math.abs(a.time-b.time)>3) score-=.05;
-			if(Math.abs(a.time-b.time)>2) score-= $("time").value
-
-
-
-			var points = scaleLine2(a.x,a.y, b.x,b.y, score)
+			if(Math.abs(a.time-b.time)<2) score-= $("time").value
+			if(Math.abs(a.time-b.time)<4) score-= ($("time").value/2)
+			if(Math.abs(a.time-b.time)<5) score-= ($("time").value/4)
+			var points = scaleLine(a.x,a.y, b.x,b.y, score)
 			a.x = points.xa
 			a.y = points.ya
 			b.x = points.xb
 			b.y = points.yb
-			
+		
 		}
 	}
 
 }
 /////////////////////////////////////////////////////////////////////////////////
-function scaleLine2(x1, y1, x2, y2, at){
+function scaleLine(x1, y1, x2, y2, at){
 	var xlen = x2 - x1, ylen = y2 - y1;
   	var length = Math.sqrt(xlen*xlen + ylen*ylen);
 	if(length<3) return {xa:x1, ya:y1, xb:x2, yb:y2};
-	at = at * 50/length
+	at = at * 1000/length
 	var ratio = -at / length;
 	var ratio2 = (length+at) / length;
-  return {
-  		xa: x1 + (xlen * ratio), 
-      ya: y1 + (ylen * ratio),
-  		xb: x1 + (xlen * ratio2), 
-      yb: y1 + (ylen * ratio2),
-      }
+  return { xa: x1 + (xlen * ratio),  ya: y1 + (ylen * ratio),
+  		   xb: x1 + (xlen * ratio2), yb: y1 + (ylen * ratio2) }
 }
 /////////////////////////////////////////////////////////////////////////////////
-// Move two values closer together by %
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-// use timer to call Force and recalculate and redraw every tick
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-matrix = new Array(96).fill(0).map(() => new Array(96).fill(0));
-letter = (n) => String.fromCharCode(n+32);
-leterIndex = (l) => l.charCodeAt()-32;
-	for(var i = 1; i < text.length; i++){
-	 	matrix[leterIndex(text[i-1])][leterIndex(text[i])]++;
-	}
-
-//////////////////////////////////////////////////////////////////////////////////
-function Matrix(){
-	ctx.beginPath();
-
-	for (var i = 1; i < matrix.length; i++){	
-		let m = matrix[i]		
-		for (var j = 1; j < m.length; j++){	
-			if(m[j]==0) {ctx.fillStyle = "#fff";}
-			else{ ctx.fillStyle = `rgb(0,${(m[j]*90)},0)`;}
-			ctx.fillRect(i*4, j*4, 3, 3);
-		}
-	}
-		
-	ctx.stroke(); 
-}
 </script> 
+	<script type="text/javascript" src="mouse.js"></script>
 </body></html>
