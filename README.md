@@ -1,6 +1,8 @@
 # [WordSpace](https://travisa9.github.io/WordSpace/)
 [View Alpha version online](https://travisa9.github.io/WordSpace/)
 
+![IMAGE](/docs/Plot.jpg)
+
 Break text into indexed vector particles and manipulate them through forces in space.
 
 ## Basic idea:
