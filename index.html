@@ -26,17 +26,28 @@
 
 <!-- <button onclick="start()"></button> -->
 <!-- <button onclick="Matrix()">Matrix</button> -->
-<button id="pause" onclick="start()">Graph</button>
+<button id="pause" onclick="start()">Rerun</button>
 <br>
-<canvas id="canvas" width="650" height="650" style="background: white; display:inline-block;"></canvas>
+<canvas id="canvas" width="650" height="650" style="background: black; display:inline-block;"></canvas>
 <div class="box" class="slidecontainer" style="display:inline-block; vertical-align:top; width:40%; color:white;">
-	Repulsion: <span id='repulseVal'>.01</span><br>
-  <input onchange="$('repulseVal').innerHTML = event.target.value;" type="range" min=".0" value=".0005" max=".1" step=".0005" id="repulse" style="width:400px"><br>
-    Temporal Attraction: <span id='timeVal'>.01</span><br>
-  <input onchange="$('timeVal').innerHTML = event.target.value;" type="range" min=".0" value=".022" max=".5" step=".001" id="time" style="width:400px"><br>
-    Identity Attraction: <span id='identityVal'>.001</span><br>
-  <input onchange="$('identityVal').innerHTML = event.target.value;" type="range" min="0" value=".005" max=".1" step=".001" id="identity" style="width:400px"><br>
-
+	Repulsion: <span id='repulseVal'>.002</span><br>
+  <input onchange="Repulse(event)" type="range" min=".0" value=".002" max=".1" step=".0005" id="repulse" style="width:400px"><br>
+    Temporal Attraction: <span id='timeVal'>.051</span><br>
+  <input onchange="Time(event)" type="range" min=".0" value=".051" max=".5" step=".001" id="time" style="width:400px"><br>
+    Identity Attraction: <span id='identityVal'>.007</span><br>
+  <input onchange="Identity(event)" type="range" min="0" value=".0107" max=".1" step=".001" id="identity" style="width:400px"><br>
+<script>
+	repulseVal = .0005, timeVal = .022, identityVal = .005
+function Repulse(event){
+	$('repulseVal').innerHTML = repulseVal = event.target.value;
+}
+function Time(event){
+	$('timeVal').innerHTML = timeVal = event.target.value;
+}
+function Identity(event){
+	$('identityVal').innerHTML = identityVal = event.target.value;
+}
+</script>
 
 <div class="box">
 	<div id='downlog'>Selection:</div>
@@ -64,7 +75,7 @@ function start(){
 	nodes = []
 	text = $("content").innerHTML;
 	for(var i = 1; i < text.length; i++){
-		nodes.push({f:text[i-1], t:text[i], time:i, x:randRange(150,450), y:randRange(150,450)})
+		nodes.push({f:text[i-1], t:text[i], time:i, x:randRange(250,350), y:randRange(250,350)})
 	}
 	nodes.sort((a,b) => (a.t > b.t) ? 1 : ((b.t > a.t) ? -1 : 0)); 
 	nodes.sort((a,b) => (a.f > b.f) ? 1 : ((b.f > a.f) ? -1 : 0)); 
@@ -72,26 +83,22 @@ function start(){
 }
 start()
 //////////////////////////////////////////////////////////////////////////////////
-setInterval(force, 400);
-function force(){
-	fibre(); Graph()
-}
-/////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 function Graph(){
 	ctx.beginPath();
-	ctx.fillStyle = `#fff8`;
+	ctx.fillStyle = `#0008`;
 	ctx.fillRect(0, 0, 650, 650);
 
 	for (var i = 1; i < nodes.length; i++){	
-		ctx.fillStyle = `rgb(0,${nodes[i].f.charCodeAt()},${nodes[i].t.charCodeAt()})`;
+		ctx.fillStyle = `rgb(128,${nodes[i].f.charCodeAt()},${255-nodes[i].t.charCodeAt()})`;
 		ctx.fillRect(nodes[i].x, nodes[i].y, 1, 1);
 	}
 		
 	ctx.stroke(); 
 }
+//////////////////////////////////////////////////////////////////////////////////
+setInterval(fibre, 400);
+/////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 function fibre( ){
 
@@ -99,27 +106,28 @@ function fibre( ){
 		a = nodes[i]
 		for(var j = i+1; j < nodes.length-1; j++){
 			b = nodes[j]
-			var score = $("repulse").value //.01
-			if(a.f==b.f && a.t==b.t) score-= $("identity").value
-			if(Math.abs(a.time-b.time)<2) score-= $("time").value
-			if(Math.abs(a.time-b.time)<4) score-= ($("time").value/2)
-			if(Math.abs(a.time-b.time)<5) score-= ($("time").value/4)
+
+			var score = repulseVal //.01
+			if(a.f==b.f && a.t==b.t) score-= identityVal
+			if(Math.abs(a.time-b.time)<2) score-= timeVal
 			var points = scaleLine(a.x,a.y, b.x,b.y, score)
-			a.x = points.xa
-			a.y = points.ya
-			b.x = points.xb
-			b.y = points.yb
-		
+			a.x = points.xa; a.y = points.ya
+			b.x = points.xb; b.y = points.yb		
 		}
 	}
-
+	 Graph()
 }
 /////////////////////////////////////////////////////////////////////////////////
 function scaleLine(x1, y1, x2, y2, at){
-	var xlen = x2 - x1, ylen = y2 - y1;
+	var xlen = x2 - x1,    ylen = y2 - y1;
   	var length = Math.sqrt(xlen*xlen + ylen*ylen);
 	if(length<3) return {xa:x1, ya:y1, xb:x2, yb:y2};
-	at = at * 1000/length
+
+	// Attraction
+	if( at<0 ){ at = at * 300/length; }
+	// Repultion
+	else { at = at * 20/length; }
+
 	var ratio = -at / length;
 	var ratio2 = (length+at) / length;
   return { xa: x1 + (xlen * ratio),  ya: y1 + (ylen * ratio),
