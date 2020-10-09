@@ -25,8 +25,10 @@ and fractal patterns when collapsing. Also, you can get comets, clumps and fract
 
 * **Clumps:** many, higherarchial clumps are a good sign that your data is being classified (grouped).
 
-* **Branching Fibres:** A decent degree of branching made of fibres of particles and clumps is a good sign 
+* **Branching Fibres:** A decent degree of branching made of fibres (dendrites) of particles and clumps is a good sign 
 that there is not only grouping, but that conditional correlation has been found between those groups.
+** Somes Dendrites**
+![Dendrites](/docs/Dendrites.jpg)
 
 ### Functional: 
 
