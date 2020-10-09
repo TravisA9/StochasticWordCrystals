@@ -1,9 +1,10 @@
 # [StochasticWordCrystals](https://travisa9.github.io/WordSpace/)
 [View Alpha version online](https://travisa9.github.io/WordSpace/)
 
-![IMAGE](/docs/Plot.jpg)
 
-Breaks text into indexed vector particles with forces which allow them to chrystalize.
+Breaks text into indexed vector particles with forces which allow them to crystallize.
+
+![IMAGE](/docs/Plot.jpg)
 
 ## Basic idea:
 
