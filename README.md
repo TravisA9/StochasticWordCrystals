@@ -48,7 +48,7 @@ until the text is fully abstracted into ideas.
 * **Time travel:** Create a slider or other control to move through time within the provided text and show only 
 the activations within that sliding window. ...Maybe show the correlated abstractions as well.
 
-* **Area Selection:** Add the ability to select all particles within a given area and view their contents as text.
+* ~~**Area Selection:** Add the ability to select all particles within a given area and view their contents as text.~~ Done!
 
 
 
