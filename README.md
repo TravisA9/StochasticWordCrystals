@@ -50,6 +50,11 @@ the activations within that sliding window. ...Maybe show the correlated abstrac
 
 * ~~**Area Selection:** Add the ability to select all particles within a given area and view their contents as text.~~ Done!
 
+### Here are some other interesting things
+
+The entire texts can be ordered and points tied into knots where similar data intersects sufficiently by setting the repulsion very low or negative and Temporal attraction a bit high. After the particles have time to organise withing a small area, increase the repulsion to reveal the completely organised string.
+
+![Dendrites](/docs/strings.jpg)
 
 
 
