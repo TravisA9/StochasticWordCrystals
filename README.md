@@ -1,5 +1,5 @@
-# [StochasticWordCrystals](https://travisa9.github.io/WordSpace/)
-[View Alpha version online](https://travisa9.github.io/WordSpace/)
+# [StochasticWordCrystals](https://travisa9.github.io/StochasticWordCrystals/)
+[View Alpha version online](https://travisa9.github.io/StochasticWordCrystals/)
 
 
 Breaks text into indexed vector particles with forces which allow them to crystallize.
