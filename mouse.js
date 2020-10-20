@@ -1,5 +1,5 @@
 $ = (sel) => document.getElementById(sel);
-Xstart = 0, Xend = 0, Ystart = 0, Yend = 0
+Xstart = -1, Xend = 0, Ystart = 0, Yend = 0
 
 function getMousePos(evt) {
     var rect = $("canvas").getBoundingClientRect();
@@ -19,6 +19,13 @@ function handleMouseUp(event) {
      var mouse = getMousePos(event)
     $("downlog").innerHTML = `Down: ${Xstart} / ${Ystart}  Up: ${mouse.x.toFixed(0)} / ${mouse.y.toFixed(0)}`;
 
+
+
+    ctx.strokeStyle  = `green`;
+    ctx.beginPath();
+    ctx.rect(Xstart, Ystart, mouse.x-Xstart, mouse.y-Ystart);
+    ctx.stroke();
+
     var str = '', stack = []
     for(var i = 0; i < nodes.length; i++){
         if(mouse.x>nodes[i].x  && Xstart<nodes[i].x && mouse.y>nodes[i].y  && Ystart<nodes[i].y ){
@@ -28,6 +35,7 @@ function handleMouseUp(event) {
     stack.sort((a,b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0)); 
             
     //-----------------------------------------------------------------------
+    if(stack.length)
     if(stack[0].time==stack[1].time-1){
         str += stack[0].f + stack[0].t
     } else  str += `${stack[0].f}${stack[0].t}(${stack[0].time})  `
@@ -37,13 +45,22 @@ function handleMouseUp(event) {
             str += `${stack[i].t}`
         } else  str += ` ${stack[i].f}${stack[i].t}(${stack[i].time}) `
     }
+
      $("dump").innerHTML = str;
+     Xstart = -1
     //-----------------------------------------------------------------------
 }
 
 function handleMouseMove(event) {
      var mouse = getMousePos(event)
     $("movelog").innerHTML = "Pos: " + mouse.x.toFixed(0) + " / " + mouse.y.toFixed(0);
+    if(Xstart>0){
+        ctx.strokeStyle  = `green`;
+        ctx.lineWidth = "2";
+        ctx.beginPath();
+        ctx.rect(Xstart, Ystart, mouse.x-Xstart, mouse.y-Ystart);
+        ctx.stroke();
+    }
 }
 
 
@@ -55,3 +72,4 @@ $("canvas").addEventListener('mouseup', handleMouseUp, false);
 // dist = (x1, y1, x2, y2) => Math.sqrt((x1-=x2)*x1 +(y1-=y2)*y1)
 // size = (a,b) => b-a
 /////////////////////////////////////////////////////////////////////////////////
+
