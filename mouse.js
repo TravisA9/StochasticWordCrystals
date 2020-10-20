@@ -35,6 +35,8 @@ function handleMouseUp(event) {
     stack.sort((a,b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0)); 
             
     //-----------------------------------------------------------------------
+    //       TODO:turn this into Function
+    //-----------------------------------------------------------------------
     if(stack.length)
     if(stack[0].time==stack[1].time-1){
         str += stack[0].f + stack[0].t
