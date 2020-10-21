@@ -62,10 +62,10 @@ randRange = (a,b) => a + ( Math.random() * (b-a) )
 	c = $("canvas");
 	ctx = c.getContext("2d");
 	nodes = [], text = '';
+	windowSize = 2000; // how many particles are compared at a given time
+	slideDistance = 0, slideIncrement = 1, slideIndex=0;
 //////////////////////////////////////////////////////////////////////////////////
-window.onload = function() {
-	start()
-};
+window.onload = function() { start(); };
 //////////////////////////////////////////////////////////////////////////////////
 // In a way this is also a matrix but the matrix does not have a set meaning. Instead
 // the matrix is like an abstract space where the meaning can be changed and derived.
@@ -74,8 +74,19 @@ window.onload = function() {
 function start(){
 	nodes = []
 	text = $("content").innerHTML;
+	text = text.replace(/(\[[^\]]*\])/g, "");
 	for(var i = 1; i < text.length; i++){
 		nodes.push({f:text[i-1], t:text[i], time:i, x:randRange(250,350), y:randRange(250,350)})
+	}
+
+	if(nodes.length>2000){
+		slideDistance = nodes.length-windowSize;
+
+	} else {
+		windowSize = nodes.length
+		slideDistance = 0
+		slideIncrement = 0;
+		slideIndex=0;
 	}
 	// nodes.sort((a,b) => (a.t > b.t) ? 1 : ((b.t > a.t) ? -1 : 0)); 
 	// nodes.sort((a,b) => (a.f > b.f) ? 1 : ((b.f > a.f) ? -1 : 0)); 
@@ -89,8 +100,15 @@ function Graph(){
 	ctx.fillStyle = `#0008`;
 	ctx.fillRect(0, 0, 650, 650);
 
-	for (var i = 1; i < nodes.length; i++){	
-		ctx.fillStyle = `rgb(${nodes[i].f.charCodeAt()},${255-nodes[i].t.charCodeAt()},255)`;
+	for(var i = slideIndex; i < slideIndex+windowSize; i++){
+	// for (var i = 1; i < nodes.length; i++){	
+		let color = 30+Math.floor((nodes[i].f.charCodeAt()*3))
+		let shade = 30+Math.floor((nodes[i].t.charCodeAt()*3))
+		//nodes[i].t.charCodeAt()
+		ctx.fillStyle = `rgb(
+		95,
+		${shade },
+		${color})`;
 		ctx.fillRect(nodes[i].x, nodes[i].y, 1, 1);
 	}
 		
@@ -102,7 +120,7 @@ setInterval(fibre, 400);
 //////////////////////////////////////////////////////////////////////////////////
 function fibre( ){
 
-	for(var i = 0; i < nodes.length-2; i++){
+	for(var i = slideIndex; i < slideIndex+windowSize; i++){
 		a = nodes[i]
 		for(var j = i+1; j < nodes.length-1; j++){
 			b = nodes[j]
@@ -116,6 +134,9 @@ function fibre( ){
 			b.x = points.xb; b.y = points.yb		
 		}
 	}
+
+	if(slideIndex < slideIncrement) slideIndex++;
+	else slideIndex=0
 	 Graph()
 }
 /////////////////////////////////////////////////////////////////////////////////
